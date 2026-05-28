@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/styles/style.css">
+  <title>SupportFlow Lite — Система поддержки</title>
+</head>
+<body>
+
+<header>
+  <h1>🛍️ SupportFlow Lite</h1>
+  <p>Система поддержки для интернет-магазина</p>
+</header>
+
+<!-- Шаг 1: Классификатор -->
+<section class="section">
+  <h2>📋 1. Классификатор обращений</h2>
+  <table id="classifierTable">
+    <thead>
+      <tr>
+        <th>Тип запроса</th>
+        <th>Пример обращения</th>
+        <th>Приоритет</th>
+        <th>Время ответа</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div style="margin-top: 15px;">
+    <button class="btn btn-secondary" onclick="exportCSV()">📥 Скачать CSV для Google Sheets</button>
+  </div>
+</section>
+
+<!-- Шаг 2: Обработка обращения -->
+<section class="section">
+  <h2>📥 2. Обработка нового обращения</h2>
+  <div class="form-group">
+    <label>Имя пользователя:</label>
+    <input type="text" id="userName" value="Анна" placeholder="Введите имя">
+  </div>
+  <div class="form-group">
+    <label>Текст обращения:</label>
+    <textarea id="userMessage" placeholder="Опишите проблему...">Деньги списались, но заказ не оформился</textarea>
+  </div>
+  <button class="btn" onclick="processTicket()">🔍 Классифицировать и обработать</button>
+  
+  <div class="result" id="result">
+    <h3>✅ Результат обработки</h3>
+    <div id="ticketDetails"></div>
+    <h4 style="margin: 15px 0 10px;">📧 Авто-ответ пользователю:</h4>
+    <pre id="autoResponse"></pre>
+  </div>
+</section>
+
+<!-- Шаг 3: Блок-схема -->
+<section class="section">
+  <h2>🔄 3. Блок-схема алгоритма</h2>
+  <div class="flowchart">
+    <div class="flow-step">📥 Приём запроса<br><small>чат / email / телефон</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">🔍 Классификация<br><small>по ключевым словам</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step decision">❓ Приоритет?</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="border-color:#dc2626;background:#fef2f2">
+      🔴 Высокий<br><small>Старший специалист</small>
+    </div>
+    <div class="flow-step" style="border-color:#ca8a04;background:#fffbeb">
+      🟡 Средний / 🟢 Низкий<br><small>Оператор 1-й линии</small>
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">💬 Ответ пользователю</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step decision">❓ Решено?</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step" style="border-color:#16a34a;background:#dcfce7">✅ Закрыть</div>
+    <div class="flow-step" style="border-color:#dc2626;background:#fef2f2">🔁 Эскалация</div>
+  </div>
+  <p style="text-align:center;margin-top:15px;font-size:13px;color:#6b7280;">
+    <strong>Условие:</strong> Если приоритет = «Высокий» → назначить старшего специалиста
+  </p>
+</section>
+
+<!-- Шаг 4: Шаблоны ответов -->
+<section class="section">
+  <h2>✉️ 4. Шаблоны ответов</h2>
+  
+  <details open>
+    <summary style="cursor:pointer;font-weight:500;margin-bottom:10px;">
+      📋 Подтверждение получения запроса
+    </summary>
+    <pre id="template1">Здравствуйте, {{userName}}!
+
+Благодарим за обращение в поддержку интернет-магазина {{storeName}}.
+
+✅ Ваш запрос №{{ticketId}} принят в работу.
+⏱️ Мы ответим в течение {{responseTime}}.
+
+Если у вас остались вопросы — просто ответьте на это письмо.
+
+С уважением,
+Служба поддержки {{storeName}}
+📞 {{supportPhone}} | 💬 {{chatLink}}</pre>
+  </details>
+  
+  <details>
+    <summary style="cursor:pointer;font-weight:500;margin:15px 0 10px;">
+      ✅ Решение проблемы
+    </summary>
+    <pre id="template2">Здравствуйте, {{userName}}!
+
+🎉 Проблема «{{issueShort}}» устранена.
+
+🔧 Что нужно сделать:
+{{solutionSteps}}
+
+🔄 Если вопрос остался — просто ответьте на это письмо.
+
+Приносим извинения за неудобства.
+
+С уважением,
+Служба поддержки {{storeName}}</pre>
+  </details>
+  
+  <details>
+    <summary style="cursor:pointer;font-weight:500;margin:15px 0 10px;">
+      🔁 Эскалация
+    </summary>
+    <pre id="template3">Здравствуйте, {{userName}}!
+
+📋 Ваш запрос №{{ticketId}} передан старшему специалисту для детального анализа.
+
+⏰ Мы свяжемся с вами до {{deadline}}.
+
+Благодарим за терпение!
+
+С уважением,
+Служба поддержки {{storeName}}
+📞 {{supportPhone}}</pre>
+  </details>
+  
+  <button class="btn btn-secondary" onclick="exportTemplates()">📄 Копировать шаблоны для отчёта</button>
+</section>
+
+<!-- Экспорт отчёта -->
+<section class="section">
+  <h2>📄 5. Экспорт отчёта</h2>
+  <button class="btn" onclick="generateReport()">✨ Сформировать отчёт (Markdown)</button>
+  <div class="export-area">
+    <textarea id="reportOutput" placeholder="Здесь появится готовый отчёт..." readonly></textarea>
+    <button class="btn btn-success" onclick="copyReport()" style="margin-top:10px;">📋 Скопировать</button>
+  </div>
+</section>
+
+<footer>
+  <p>SupportFlow Lite • Практическая работа: «Разработка алгоритма поддержки»<br>
+  Веб-разработчик • 2026</p>
+</footer>
+
+<script src="assets/script/script.js">
+
+</script>
+
+</body>
+</html>
