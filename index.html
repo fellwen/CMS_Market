@@ -63,10 +63,10 @@
     <span class="flow-arrow">→</span>
     <div class="flow-step decision">❓ Приоритет?</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-step" style="border-color:#dc2626;background:#fef2f2">
+    <div class="flow-step high-priority">
       🔴 Высокий<br><small>Старший специалист</small>
     </div>
-    <div class="flow-step" style="border-color:#ca8a04;background:#fffbeb">
+    <div class="flow-step medium-low">
       🟡 Средний / 🟢 Низкий<br><small>Оператор 1-й линии</small>
     </div>
     <span class="flow-arrow">→</span>
@@ -74,8 +74,8 @@
     <span class="flow-arrow">→</span>
     <div class="flow-step decision">❓ Решено?</div>
     <span class="flow-arrow">→</span>
-    <div class="flow-step" style="border-color:#16a34a;background:#dcfce7">✅ Закрыть</div>
-    <div class="flow-step" style="border-color:#dc2626;background:#fef2f2">🔁 Эскалация</div>
+    <div class="flow-step resolved">✅ Закрыть</div>
+    <div class="flow-step escalated">🔁 Эскалация</div>
   </div>
   <p style="text-align:center;margin-top:15px;font-size:13px;color:#6b7280;">
     <strong>Условие:</strong> Если приоритет = «Высокий» → назначить старшего специалиста
@@ -156,11 +156,9 @@
 <footer>
   <p>SupportFlow Lite • Практическая работа: «Разработка алгоритма поддержки»<br>
   Веб-разработчик • 2026</p>
+  <a href="admin.html">Админ панель</a>
 </footer>
 
-<script src="assets/script/script.js">
-
-</script>
-
+<script src="assets/script/script.js"></script>
 </body>
 </html>
